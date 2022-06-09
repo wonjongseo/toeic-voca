@@ -1,4 +1,7 @@
 import "dotenv/config";
+import "./db";
+import "./models/Kangi";
+import "./models/Japan";
 import app from "./server.js";
 
 const PORT = 4000;
