@@ -6,9 +6,6 @@ const japanSchema = new mongoose.Schema({
     mean: {type: String},
     yomikata: {type: String},
     createdAt: {type: Date, required: true, default: Date.now},
-    // undoc: {type: String},
-    // hundoc: {type: String},
-    // level: {type: String},
 });
 
 const Japan = mongoose.model("Japan", japanSchema);

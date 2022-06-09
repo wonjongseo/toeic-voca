@@ -14,8 +14,15 @@ export const getKangiAll = async (req, res, next) => {
                 skip: (step - 1) * 10,
                 limit: 10,
             });
+        } else if (step >= 6 && step <= 10) {
+            kangis = await Kangi.find(null, null, {
+                skip: (step - 1 - 5) * 20,
+                limit: 20,
+            });
         }
     }
+
+    console.log(kangis.length);
     return res.json(kangis);
 };
 
