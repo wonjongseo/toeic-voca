@@ -29,26 +29,26 @@ export const getKangiAll = async (req, res, next) => {
 export const getKangisByLevel = async (req, res, next) => {
     const {n} = req.query;
 
-    const {level} = req.query;
+    const {step} = req.query;
 
     let kangifilteredLevel;
 
-    if (level <= 5) {
+    if (step <= 5) {
         kangifilteredLevel = await Kangi.find({level: n}, null, {
             skip: (level - 1) * 10,
             limit: 10,
         });
-    } else if (level > 5 && level <= 10) {
+    } else if (step <= 10) {
         kangifilteredLevel = await Kangi.find({level: n}, null, {
             skip: (level - 5 - 1) * 20,
             limit: 20,
         });
-    } else if (level <= 15) {
+    } else if (step <= 15) {
         kangifilteredLevel = await Kangi.find({level: n}, null, {
             skip: (level - 10 - 1) * 30,
             limit: 30,
         });
-    } else if (level <= 20) {
+    } else if (step <= 20) {
         kangifilteredLevel = await Kangi.find({level: n}, null, {
             skip: (level - 15 - 1) * 40,
             limit: 40,
