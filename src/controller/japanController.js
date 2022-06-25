@@ -22,7 +22,6 @@ export const uploadJapans = async (req, res, next) => {
 export const getJapansByKangiId = async (req, res, next) => {
     const {id} = req.params;
 
-    console.log(page);
     console.log(id);
     const japans = await Japan.find({
         id,
