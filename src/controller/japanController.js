@@ -4,12 +4,13 @@ import Japan from "../models/Japan";
 let workbook = xlsx.readFile(__dirname + "/../../public/일본어책.xlsx");
 
 export const uploadJapans = async (req, res, next) => {
-    let worksheet = workbook.Sheets["Sheet2"];
+    await Japan.deleteMany({});
+    let worksheet = workbook.Sheets["Sheet1"];
 
-    for (let i = 731; i <= 809; i++) {
+    for (let i = 1; i <= 1569; i++) {
         await Japan.create({
-            kangi: worksheet["A" + i].w,
-            yomikata: worksheet["B" + i].w,
+            yomikata: worksheet["A" + i].w,
+            kangi: worksheet["B" + i].w,
             mean: worksheet["C" + i].w,
             id: worksheet["D" + i].w,
         });
