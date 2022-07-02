@@ -5,6 +5,7 @@
     "main": "index.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
+        "dev": "nodemon --exec babel-node src/init.js",
         "start": "node build/init.js",
         "build:server": "babel src -d build"
     },
