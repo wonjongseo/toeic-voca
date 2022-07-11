@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 
 const japanSchema = new mongoose.Schema({
     id: {type: String},
+    level: {type: String},
     kangi: {type: String},
     mean: {type: String},
     yomikata: {type: String},
