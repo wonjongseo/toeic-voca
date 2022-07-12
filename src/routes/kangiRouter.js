@@ -10,8 +10,8 @@ import {
 
 const kangiRouter = express.Router();
 
-kangiRouter.get("/all", getKangiAll);
 kangiRouter.get("/", getKangiByStep);
+kangiRouter.get("/all", getKangiAll);
 kangiRouter.get("/levels", getKangiAllByLevel);
 kangiRouter.get("/level", getKangisByLevel);
 kangiRouter.post("/upload", uploadKangi);

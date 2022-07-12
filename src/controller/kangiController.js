@@ -4,6 +4,67 @@ import {async} from "regenerator-runtime";
 
 let workbook = xlsx.readFile(__dirname + "/../../public/일본어책.xlsx");
 
+export const test = async (req, res, next) => {
+    const allKangi = await Kangi.find({});
+    console.log(allKangi[0].level);
+    const levelOne = [];
+    const levelTwo = [];
+    const levelThree = [];
+    const levelFour = [];
+    const levelFive = [];
+
+    for (let i = 0; i < allKangi.length; i++) {
+        switch (allKangi[i].level) {
+            case "1":
+                levelOne.push(allKangi[i]);
+                break;
+
+            case "2":
+                levelTwo.push(allKangi[i]);
+                break;
+            case "3":
+                levelThree.push(allKangi[i]);
+                break;
+
+            case "4":
+                levelFour.push(allKangi[i]);
+                break;
+            case "5":
+                levelFive.push(allKangi[i]);
+                break;
+        }
+    }
+
+    let kangis = {};
+
+    kangis[1] = {
+        kangis: levelOne,
+        "total ": levelOne.length,
+    };
+
+    kangis[2] = {
+        kangis: levelOne,
+        "total ": levelOne.length,
+    };
+
+    kangis[3] = {
+        kangis: levelOne,
+        "total ": levelOne.length,
+    };
+
+    kangis[4] = {
+        kangis: levelOne,
+        "total ": levelOne.length,
+    };
+
+    kangis[5] = {
+        kangis: levelOne,
+        "total ": levelOne.length,
+    };
+
+    return res.json(kangis);
+};
+
 export const getKangiAll = async (req, res, next) => {
     const kangis = await Kangi.find({});
 
