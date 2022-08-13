@@ -1,6 +1,7 @@
 import Word from "../models/Word";
 import { books } from "../excelData";
 import { postRelatedWords } from "./relatedWordsController";
+import { async } from "regenerator-runtime";
 
 export const getWordsByFirstword = async (req, res, next) => {
   const { firstWord } = req.query;
@@ -137,6 +138,15 @@ const postWords = async (firstWord) => {
   }
 };
 
+export const getWordsByLevel = async (req, res, next) => {
+  const { n } = req.query;
+
+  console.log(n);
+
+  const words = await Word.find({ level: n });
+
+  return res.json(words);
+};
 export const postExcel = async (req, res, next) => {
   const { firstWord } = req.query;
 

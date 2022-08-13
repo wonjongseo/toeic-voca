@@ -1,5 +1,9 @@
 import express from "express";
-import { postExcel, getWordsByFirstword } from "../controller/wordsController";
+import {
+  postExcel,
+  getWordsByFirstword,
+  getWordsByLevel,
+} from "../controller/wordsController";
 
 // localhost:4000/words
 const wordRouter = express.Router();
@@ -9,5 +13,7 @@ wordRouter.post("/", postExcel);
 
 // ?firstWord=ga ..
 wordRouter.get("/", getWordsByFirstword);
+
+wordRouter.get("/level", getWordsByLevel);
 
 export default wordRouter;
