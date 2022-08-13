@@ -1,18 +1,14 @@
 import express from "express";
-import xlsx from "xlsx";
-import japanRouter from "./routes/japanRouter";
-import kangiRouter from "./routes/kangiRouter";
-import paginate from "express-paginate";
+import japanRouter from "./routes/relatedWordsRouter";
+import kangiRouter from "./routes/wordsRouter";
 import morgan from "morgan";
-import {test} from "./controller/kangiController";
 
 const app = express();
 
-app.use(paginate.middleware(10, 50));
+// app.use(paginate.middleware(10, 50));
 app.use(morgan("dev"));
 
-app.get("/", test);
-app.use("/japans", japanRouter);
-app.use("/kangis", kangiRouter);
+app.use("/related", japanRouter);
+app.use("/words", kangiRouter);
 
 export default app;
