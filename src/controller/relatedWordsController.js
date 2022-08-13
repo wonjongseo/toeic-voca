@@ -93,7 +93,6 @@ export const postRelatedWords = async (firstWord) => {
 export const getReleatedWordsById = async (req, res, next) => {
   const { id } = req.query;
 
-  console.log(id);
   const related = await RelatedWord.find({ id });
 
   return res.json(related);
