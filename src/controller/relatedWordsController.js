@@ -9,20 +9,71 @@ export const postRelatedWords = async (firstWord) => {
 
   switch (firstWord) {
     case "ga":
-      book = books.Sheets["Sheet1"];
+      book = books.Sheets["ga"];
       endIndex = 1626;
       break;
     case "na":
-      book = books.Sheets["Sheet2"];
+      book = books.Sheets["na"];
       endIndex = 144;
       break;
     case "da":
-      book = books.Sheets["Sheet3"];
+      book = books.Sheets["da"];
       endIndex = 488;
       break;
     case "ra":
-      book = books.Sheets["Sheet4"];
+      book = books.Sheets["ra"];
       endIndex = 547;
+      break;
+    case "ma":
+      endIndex = 506;
+      book = books.Sheets["ma"];
+      break;
+
+    case "ba":
+      endIndex = 709;
+      book = books.Sheets["ba"];
+      break;
+    case "sa":
+      endIndex = 1413;
+      book = books.Sheets["sa"];
+      break;
+    case "a":
+      endIndex = 604; // must change
+      book = books.Sheets["a"];
+      break;
+    // case "ja":
+    // endIndex = ; // must change
+    // book = books.Sheets["ja"];
+    // break;
+
+    // case "tya":
+    //   endIndex = 609; // must change
+    //   book = books.Sheets["Sheet13"];
+    //   break;
+
+    // case "ka":
+    //   endIndex = ; // must change
+    //   book = books.Sheets["Sheet13"];
+    //   break;
+
+    // case "ta":
+    // endIndex = 68; // must change
+    // book = books.Sheets["Sheet12"];
+    // break;
+
+    // case "pa":
+    // endIndex = ; // must change
+    // book = books.Sheets["Sheet11"];
+    // break;
+
+    case "ha":
+      endIndex = 609; // must change
+      book = books.Sheets["ha"];
+      break;
+
+    case "acc": // 등
+      endIndex = 13; // must change
+      book = books.Sheets["acc"];
       break;
     default:
       return;
