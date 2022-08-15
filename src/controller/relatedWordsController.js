@@ -72,7 +72,7 @@ export const postRelatedWords = async (firstWord) => {
       break;
 
     case "acc": // 등
-      endIndex = 13; // must change
+      endIndex = 0; // must change
       book = books.Sheets["acc"];
       break;
     default:
