@@ -40,13 +40,6 @@ export const getWordsByFirstword = async (req, res, next) => {
   const words = await Word.find({ firstWord });
 
   return res.json(words);
-
-  const words_by_firstword = {
-    words,
-    total_cnt: words.length,
-  };
-
-  return res.json(words_by_firstword);
 };
 
 // get words from execl file
@@ -99,8 +92,9 @@ const postWords = async (firstWord) => {
       book = books.Sheets["tya"];
       break;
 
+    // tmp
     case "ka": // ㅋ
-      endIndex = 2;
+      endIndex = 501;
       book = books.Sheets["ka"];
       break;
 
@@ -117,8 +111,9 @@ const postWords = async (firstWord) => {
       endIndex = 156; // must change
       book = books.Sheets["ha"];
       break;
+    //tmp
     case "acc": // 등
-      endIndex = 5; // must change
+      endIndex = 421; // must change
       book = books.Sheets["acc"];
       break;
     default:
