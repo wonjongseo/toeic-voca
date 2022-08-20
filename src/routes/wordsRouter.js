@@ -3,6 +3,7 @@ import {
   postExcel,
   getWordsByFirstword,
   getWordsByLevel,
+  getFirstameCnt as getFirstnameCnt,
 } from "../controller/wordsController";
 
 // localhost:4000/words
@@ -15,5 +16,7 @@ wordRouter.post("/", postExcel);
 wordRouter.get("/", getWordsByFirstword);
 
 wordRouter.get("/level", getWordsByLevel);
+
+wordRouter.get("/cnt", getFirstnameCnt);
 
 export default wordRouter;
