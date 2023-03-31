@@ -53,7 +53,7 @@ export const execlToJsonGrammar = () => {
   return resultData;
 };
 
-export const execlToJsonToeciVoca = (headTitle) => {
+export const execlToJsonJLPT = (headTitle) => {
   console.log(headTitle);
 
   const sheet = japanBooks.Sheets[headTitle];
@@ -101,7 +101,7 @@ export const execlToJson2316JlptVoca = (headTitle) => {
   return json;
 };
 
-export const execlToJsonJlptVoca = (req, res) => {
+export const execlToJsonToeic = (req, res) => {
   const sheet = books.Sheets["Sheet1"];
   const datas = xlsx.utils.sheet_to_json(sheet);
   //

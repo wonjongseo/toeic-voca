@@ -1,12 +1,36 @@
 import {
   execlToJson2316JlptVoca,
   execlToJsonGrammar,
-  execlToJsonJlptVoca,
-  execlToJsonToeciVoca,
+  execlToJsonToeic,
+  execlToJsonJLPT,
 } from "../excelData";
 
 export const postJlptVoca = async (req, res) => {
-  const vocas = execlToJsonJlptVoca();
+  const vocas = execlToJsonToeic();
+
+  return res.json(vocas);
+};
+
+export const postAllJlptVoca = async (req, res) => {
+  const hiragas = [
+    "あ단",
+    "か단",
+    "さ단",
+    "た단",
+    "な단",
+    "は단",
+    "ま단",
+    "や단",
+    "ら단",
+    "い형용사",
+    "な형용사",
+    "부사",
+  ];
+
+  const result = [];
+  for (let i = 0; i < hiragas.length; i++) {
+    result.push(execlToJsonToeic());
+  }
 
   return res.json(vocas);
 };
@@ -22,7 +46,7 @@ export const post2316JlptVoca = async (req, res) => {
 export const postToeicVoca = async (req, res) => {
   const { headTitle } = req.query;
 
-  const vocas = execlToJsonToeciVoca(headTitle);
+  const vocas = execlToJsonJLPT(headTitle);
 
   return res.json(vocas);
 };

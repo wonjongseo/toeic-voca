@@ -1,6 +1,7 @@
 import express from "express";
 import {
   post2316JlptVoca,
+  postAllJlptVoca,
   postJlptGrammar,
   postJlptVoca,
   postToeicVoca,
@@ -15,5 +16,6 @@ wordRouter.get("/", postJlptVoca);
 wordRouter.get("/book", post2316JlptVoca);
 wordRouter.get("/grammar", postJlptGrammar);
 wordRouter.get("/japan", postToeicVoca);
+wordRouter.get("/japan-all", postAllJlptVoca);
 
 export default wordRouter;
