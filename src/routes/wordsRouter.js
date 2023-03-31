@@ -3,8 +3,8 @@ import {
   post2316JlptVoca,
   postAllJlptVoca,
   postJlptGrammar,
-  postJlptVoca,
   postToeicVoca,
+  postJlptVoca,
 } from "../controller/wordsController";
 
 // localhost:4000/words
@@ -12,10 +12,10 @@ const wordRouter = express.Router();
 
 // ?firstWord=ga ..
 
-wordRouter.get("/", postJlptVoca);
+wordRouter.get("/", postToeicVoca);
 wordRouter.get("/book", post2316JlptVoca);
 wordRouter.get("/grammar", postJlptGrammar);
-wordRouter.get("/japan", postToeicVoca);
+wordRouter.get("/japan", postJlptVoca);
 wordRouter.get("/japan-all", postAllJlptVoca);
 
 export default wordRouter;
