@@ -59,7 +59,8 @@ export const execlToJsonJLPT = (headTitle) => {
   const sheet = japanBooks.Sheets[headTitle];
   const datas = xlsx.utils.sheet_to_json(sheet);
 
-  var fullHeadTitle = headTitle + "단";
+
+
   const json = [];
   for (let i = 0; i < datas.length; i++) {
     const noDayVoca = {
@@ -67,7 +68,7 @@ export const execlToJsonJLPT = (headTitle) => {
       word: datas[i]["단어"],
       yomikata: datas[i]["히라가나"],
       mean: datas[i]["뜻"],
-      headTitle: fullHeadTitle,
+      headTitle: headTitle,
     };
     id++;
     json.push(noDayVoca);
@@ -79,26 +80,87 @@ export const execlToJsonJLPT = (headTitle) => {
 };
 
 export const execlToJson2316JlptVoca = (headTitle) => {
-  const sheet = japan2316Books.Sheets[headTitle];
-  const datas = xlsx.utils.sheet_to_json(sheet);
-  //
+  const headTitlesheet = japan2316Books.Sheets[headTitle];
+  const headTitleDatas = xlsx.utils.sheet_to_json(headTitlesheet);
 
-  const json = [];
-  for (let i = 0; i < datas.length; i++) {
-    const voca = {
-      id: datas[i]["id"],
-      Japan: datas[i]["Japan"],
-      korea: datas[i]["korea"],
-      undoc: datas[i]["undoc"],
-      hundoc: datas[i]["hundoc"],
-    };
 
-    json.push(voca);
+  const headTitleRelatedsheet = japan2316Books.Sheets[headTitle +'-연관'];
+  const headTitleRelatedDatas = xlsx.utils.sheet_to_json(headTitleRelatedsheet);
+  
+
+  const headTitleWords = [];
+  const headTitleId =[];
+
+  const headTitleRelatedId = [];
+  const headTitleRelatedWords = [];
+
+  
+  for(let i = 0 ; i < headTitleRelatedDatas.length ; i++) {
+    headTitleRelatedId.push(headTitleRelatedDatas[i]['japanese_id'])
+
+    const yomikata = headTitleRelatedDatas[i]['yomikata']
+    const word = headTitleRelatedDatas[i]['word']
+    const mean = headTitleRelatedDatas[i]['mean']
+    if(yomikata== undefined && word ==undefined && mean == undefined){
+      continue;
+    }
+ 
+     const relatedWord = {
+      yomikata ,
+      word ,
+      mean ,
+    } 
+
+
+    headTitleRelatedWords.push(relatedWord);
   }
 
-  console.log(json);
+  console.log(headTitleRelatedId.length);
 
-  return json;
+  for (let i = 0; i < headTitleDatas.length; i++) {
+    const id = headTitleDatas[i]["id"];
+
+    const japan=  headTitleDatas[i]["japan"];
+const korea=  headTitleDatas[i]["korea"];
+const undoc=  headTitleDatas[i]["undoc"];
+const hundoc=  headTitleDatas[i]["hundoc"];
+const jlpt_level =  headTitleDatas[i]["jlpt_level"];
+if(japan== undefined && korea ==undefined && undoc == undefined && hundoc == undefined && jlpt_level == undefined){
+  continue;
+}
+
+    headTitleId.push(id);
+
+    const voca = {
+      japan,
+      korea,
+      undoc,
+      hundoc,
+      headTitle,
+      jlpt_level ,
+    };
+
+    headTitleWords.push(voca);
+  }
+  console.log(headTitleId.length);
+
+  for(let i = 0 ;i <  headTitleId.length ; i++) {
+    const relatedVoca = [];
+      for(let j = 0 ; j< headTitleRelatedId.length ; j++) {
+          if(headTitleId[i] == headTitleRelatedId[j]) {
+            relatedVoca.push(headTitleRelatedWords[j]);
+          }
+
+          if(headTitleId[i] < headTitleRelatedId[j]) {
+              break;
+          }
+      }
+       headTitleWords[i] = {...headTitleWords[i] ,  relatedVoca};
+  } 
+
+  console.log(headTitleWords);
+
+  return headTitleWords;
 };
 
 export const execlToJsonToeic = (req, res) => {
