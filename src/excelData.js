@@ -12,27 +12,25 @@ var id = 1;
 export const execlToJsonGrammar = () => {
   console.log("gramar et");
 
-  const sheet = japanBooks.Sheets["문법"];
-  const datas = xlsx.utils.sheet_to_json(sheet);
+  const grammarSheet = japanBooks.Sheets["문법"];
+  const grammaDatas = xlsx.utils.sheet_to_json(grammarSheet);
 
   const resultData = [];
-
-  for (let i = 0; i < datas.length; i++) {
-    console.log(datas[i]["grammar"]);
-
+  let i = 0;
+  for (; i < grammaDatas.length; i++) {
     const examples = [];
-    const grammar = datas[i]["grammar"];
-    for (let j = 1; j < 12; j++) {
-      if (datas[i]["exampleJapan" + j] != undefined) {
+    const grammar = grammaDatas[i]["grammar"];
+    for (let j = 1; j < 14; j++) {
+      if (grammaDatas[i]["exampleJapan" + j] != undefined) {
         var answer = "";
-        if (datas[i]["exampleQuiz" + j] != undefined) {
-          answer = datas[i]["exampleQuiz" + j];
+        if (grammaDatas[i]["exampleQuiz" + j] != undefined) {
+          answer = grammaDatas[i]["exampleQuiz" + j];
         } else {
           answer = grammar;
         }
         const exmaple = {
-          word: datas[i]["exampleJapan" + j],
-          mean: datas[i]["exampleKorean" + j],
+          word: grammaDatas[i]["exampleJapan" + j],
+          mean: grammaDatas[i]["exampleKorean" + j],
           answer: answer,
         };
         examples.push(exmaple);
@@ -41,15 +39,57 @@ export const execlToJsonGrammar = () => {
     const newGrammarData = {
       id: i,
       grammar: grammar,
-      means: datas[i]["means"],
-      description: datas[i]["description"],
-      connectionWays: datas[i]["connectionWays"],
+      means: grammaDatas[i]["means"],
+      description: grammaDatas[i]["description"],
+      connectionWays: grammaDatas[i]["connectionWays"],
       examples: examples,
     };
-    console.log(newGrammarData);
     resultData.push(newGrammarData);
   }
-  console.log(resultData);
+
+  // 문법2 , 문법2-예제
+
+  const grammar2Sheet = japanBooks.Sheets["문법2"];
+  const grammar2ExamSheet = japanBooks.Sheets["문법2-예제"];
+
+  const grammar2Datas = xlsx.utils.sheet_to_json(grammar2Sheet);
+  const grammar2ExamDatas = xlsx.utils.sheet_to_json(grammar2ExamSheet);
+
+  const grammar2List = [];
+
+  for (let j = 0; j < grammar2Datas.length; j++) {
+    const tempGrammar2 = {
+      id: i,
+      grammar: grammar2Datas[j]["grammar"],
+      means: grammar2Datas[j]["means"],
+      description: grammar2Datas[j]["description"],
+      connectionWays: grammar2Datas[j]["connectionWays"],
+      examples: [],
+    };
+    i++;
+    grammar2List.push(tempGrammar2);
+  }
+
+  for (let j = 0; j < grammar2ExamDatas.length; j++) {
+    const id = grammar2ExamDatas[j]["id"];
+    const grammar = grammar2List[id - 1].grammar;
+    let exampleQuiz = grammar2ExamDatas[j]["exampleQuiz"];
+    if (exampleQuiz == undefined) {
+      exampleQuiz = grammar;
+    }
+    const tempGrammar2Exam = {
+      answer: exampleQuiz,
+      word: grammar2ExamDatas[j]["exampleJapan"],
+      mean: grammar2ExamDatas[j]["exampleKorean"],
+    };
+    console.log(tempGrammar2Exam);
+    grammar2List[id - 1].examples.push(tempGrammar2Exam);
+  }
+
+  console.log(grammar2List);
+
+  resultData.push(...grammar2List);
+
   return resultData;
 };
 
