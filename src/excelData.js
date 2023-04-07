@@ -59,7 +59,7 @@ export const execlToJsonGrammar = () => {
 
   for (let j = 0; j < grammar2Datas.length; j++) {
     const tempGrammar2 = {
-      id: i,
+      id: grammar2ExamDatas[j]["id"],
       grammar: grammar2Datas[j]["grammar"],
       means: grammar2Datas[j]["means"],
       description: grammar2Datas[j]["description"],
@@ -73,8 +73,12 @@ export const execlToJsonGrammar = () => {
   for (let j = 0; j < grammar2ExamDatas.length; j++) {
     const id = grammar2ExamDatas[j]["id"];
     const grammar = grammar2List[id - 1].grammar;
-    let exampleQuiz = grammar2ExamDatas[j]["exampleQuiz"];
-    if (exampleQuiz == undefined) {
+    let exampleQuiz;
+    ``;
+
+    if (grammar2ExamDatas[j]["exampleQuiz"] != undefined) {
+      exampleQuiz = grammar2ExamDatas[j]["exampleQuiz"];
+    } else {
       exampleQuiz = grammar;
     }
     const tempGrammar2Exam = {
