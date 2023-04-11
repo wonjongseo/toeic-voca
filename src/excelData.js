@@ -2,7 +2,10 @@ import express from "express";
 import xlsx from "xlsx";
 
 export const books = xlsx.readFile(__dirname + "/../public/toeic_voca.xlsx");
-export const japanBooks = xlsx.readFile(__dirname + "/../public/n1.xlsx");
+export const japanN1Books = xlsx.readFile(__dirname + "/../public/n1.xlsx");
+export const japanN2345Books = xlsx.readFile(
+  __dirname + "/../public/n2345.xlsx"
+);
 export const japan2316Books = xlsx.readFile(
   __dirname + "/../public/jlpt2316book.xlsx"
 );
@@ -12,7 +15,7 @@ var id = 1;
 export const execlToJsonGrammar = () => {
   console.log("gramar et");
 
-  const grammarSheet = japanBooks.Sheets["문법"];
+  const grammarSheet = japanN1Books.Sheets["문법"];
   const grammaDatas = xlsx.utils.sheet_to_json(grammarSheet);
 
   const resultData = [];
@@ -49,8 +52,8 @@ export const execlToJsonGrammar = () => {
 
   // 문법2 , 문법2-예제
 
-  const grammar2Sheet = japanBooks.Sheets["문법2"];
-  const grammar2ExamSheet = japanBooks.Sheets["문법2-예제"];
+  const grammar2Sheet = japanN1Books.Sheets["문법2"];
+  const grammar2ExamSheet = japanN1Books.Sheets["문법2-예제"];
 
   const grammar2Datas = xlsx.utils.sheet_to_json(grammar2Sheet);
   const grammar2ExamDatas = xlsx.utils.sheet_to_json(grammar2ExamSheet);
@@ -74,7 +77,6 @@ export const execlToJsonGrammar = () => {
     const id = grammar2ExamDatas[j]["id"];
     const grammar = grammar2List[id - 1].grammar;
     let exampleQuiz;
-    ``;
 
     if (grammar2ExamDatas[j]["exampleQuiz"] != undefined) {
       exampleQuiz = grammar2ExamDatas[j]["exampleQuiz"];
@@ -97,10 +99,80 @@ export const execlToJsonGrammar = () => {
   return resultData;
 };
 
+export const execlTo2345JsonJLPT = (level) => {
+  console.log(level);
+
+  const jlpt_n = japanN2345Books.Sheets[level];
+  const datas = xlsx.utils.sheet_to_json(jlpt_n);
+  console.log("datas.length", datas.length);
+  const json = [];
+
+  for (let i = 0; i < datas.length; i++) {
+    const word = datas[i]["단어"];
+    var yomikata = datas[i]["히라가나"];
+    if (yomikata.includes("\n")) {
+      yomikata = yomikata.split("\n")[0];
+    }
+    if (word == undefined) {
+      word = yomikata;
+    } else {
+      if (word.includes("\n")) {
+        word = word.split("\n")[0];
+      }
+    }
+    const noDayVoca = {
+      id: i,
+      word,
+      yomikata,
+      mean: datas[i]["뜻"],
+      // headTitle: headTitle,
+    };
+    id++;
+    json.push(noDayVoca);
+  }
+  const resultList = [];
+
+  const stepCont = Math.floor(json.length / 210);
+  const restStep = Math.floor(json.length % 210);
+  // 0 210
+  // 210 420
+  // 420 630
+  // 630
+  var tmp = 0;
+  for (; tmp < stepCont; tmp++) {
+    resultList.push(json.slice(tmp * 210, tmp * 210 + 210));
+  }
+  if (restStep != 0) {
+    console.log("tmp", tmp);
+
+    console.log(
+      "json.slice(tmp * 210 + 210, json.length)",
+      json.slice(stepCont * 210 + 210)
+    );
+
+    resultList.push(json.slice((stepCont - 1) * 210 + 210));
+  }
+
+  console.log("stepCont", stepCont);
+  console.log("restStep", restStep);
+  // 210
+  // 14   1470
+  // console.log(json);
+  for (var tt = 0; tt < resultList.length; tt++) {
+    for (var bb = 0; bb < resultList[tt].length; bb++) {
+      resultList[tt][bb] = {
+        ...resultList[tt][bb],
+        headTitle: tt + 1 + "일",
+      };
+    }
+  }
+  return resultList;
+};
+
 export const execlToJsonJLPT = (headTitle) => {
   console.log(headTitle);
 
-  const sheet = japanBooks.Sheets[headTitle];
+  const sheet = japanN1Books.Sheets[headTitle];
   const datas = xlsx.utils.sheet_to_json(sheet);
 
   const json = [];
@@ -135,15 +207,13 @@ export const execlToJson2316JlptVoca = (headTitle) => {
   const headTitleRelatedWords = [];
 
   for (let i = 0; i < headTitleRelatedDatas.length; i++) {
-    headTitleRelatedId.push(headTitleRelatedDatas[i]["japanese_id"]);
-
     const yomikata = headTitleRelatedDatas[i]["yomikata"];
     const word = headTitleRelatedDatas[i]["word"];
     const mean = headTitleRelatedDatas[i]["mean"];
     if (yomikata == undefined && word == undefined && mean == undefined) {
       continue;
     }
-
+    headTitleRelatedId.push(headTitleRelatedDatas[i]["japanese_id"]);
     const relatedWord = {
       yomikata,
       word,
@@ -195,9 +265,9 @@ export const execlToJson2316JlptVoca = (headTitle) => {
         relatedVoca.push(headTitleRelatedWords[j]);
       }
 
-      if (headTitleId[i] < headTitleRelatedId[j]) {
-        break;
-      }
+      // if (headTitleId[i] < headTitleRelatedId[j]) {
+      //   break;
+      // }
     }
     headTitleWords[i] = { ...headTitleWords[i], relatedVoca };
   }
