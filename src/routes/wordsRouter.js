@@ -1,12 +1,13 @@
 import express from "express";
 import {
   post2316JlptVoca,
-  postAllJlptVoca,
+  postN1AllJlptVoca,
   postJlptGrammar,
   postToeicVoca,
-  postJlptVoca,
+  postN1JlptVoca,
   postAll2316JlptVoca,
   postJlptN2345Voca,
+  postJlptGrammarN2N3,
 } from "../controller/wordsController";
 
 // localhost:4000/words
@@ -19,7 +20,9 @@ wordRouter.get("/n", postJlptN2345Voca);
 wordRouter.get("/book", post2316JlptVoca);
 wordRouter.get("/book-all", postAll2316JlptVoca);
 wordRouter.get("/grammar", postJlptGrammar);
-wordRouter.get("/japan", postJlptVoca);
-wordRouter.get("/japan-all", postAllJlptVoca);
+wordRouter.get("/grammar-n3", postJlptGrammarN2N3);
+wordRouter.get("/japan", postN1JlptVoca);
+
+wordRouter.get("/japan-all", postN1AllJlptVoca);
 
 export default wordRouter;

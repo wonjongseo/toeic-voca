@@ -3,6 +3,12 @@ import xlsx from "xlsx";
 
 export const books = xlsx.readFile(__dirname + "/../public/toeic_voca.xlsx");
 export const japanN1Books = xlsx.readFile(__dirname + "/../public/n1.xlsx");
+export const japanN1GrammarBooks = xlsx.readFile(
+  __dirname + "/../public/n-1문법.xlsx"
+);
+export const japanN2N3Books = xlsx.readFile(
+  __dirname + "/../public/n2,n3문법.xlsx"
+);
 export const japanN2345Books = xlsx.readFile(
   __dirname + "/../public/n2345.xlsx"
 );
@@ -15,7 +21,7 @@ var id = 1;
 export const execlToJsonGrammar = () => {
   console.log("gramar et");
 
-  const grammarSheet = japanN1Books.Sheets["문법"];
+  const grammarSheet = japanN1GrammarBooks.Sheets["문법"];
   const grammaDatas = xlsx.utils.sheet_to_json(grammarSheet);
 
   const resultData = [];
@@ -52,8 +58,8 @@ export const execlToJsonGrammar = () => {
 
   // 문법2 , 문법2-예제
 
-  const grammar2Sheet = japanN1Books.Sheets["문법2"];
-  const grammar2ExamSheet = japanN1Books.Sheets["문법2-예제"];
+  const grammar2Sheet = japanN1GrammarBooks.Sheets["문법2"];
+  const grammar2ExamSheet = japanN1GrammarBooks.Sheets["문법2-예시"];
 
   const grammar2Datas = xlsx.utils.sheet_to_json(grammar2Sheet);
   const grammar2ExamDatas = xlsx.utils.sheet_to_json(grammar2ExamSheet);
@@ -99,6 +105,66 @@ export const execlToJsonGrammar = () => {
   return resultData;
 };
 
+export const execlToJsonGrammarN2N3 = () => {
+  console.log("execlToJsonGrammarN2N3 et");
+
+  // 문법2 , 문법2-예제
+  const grammarN3Sheet = japanN2N3Books.Sheets["n3-문법"];
+  const grammarN3ExamSheet = japanN2N3Books.Sheets["n3-문법-예제"];
+
+  const grammarN3Datas = xlsx.utils.sheet_to_json(grammarN3Sheet);
+  const grammarN3ExamDatas = xlsx.utils.sheet_to_json(grammarN3ExamSheet);
+
+  const grammarN3List = [];
+
+  for (let j = 0; j < grammarN3Datas.length; j++) {
+    const tempGrammar2 = {
+      id: grammarN3Datas[j]["id"],
+      grammar: grammarN3Datas[j]["grammar"],
+      means: grammarN3Datas[j]["means"],
+      description: grammarN3Datas[j]["description"],
+      connectionWays: grammarN3Datas[j]["connectionWays"],
+      examples: [],
+    };
+    console.log("tempGrammar2", tempGrammar2);
+
+    grammarN3List.push(tempGrammar2);
+  }
+
+  for (let j = 0; j < grammarN3ExamDatas.length; j++) {
+    const id = grammarN3ExamDatas[j]["id"];
+
+    let idIndex = undefined;
+    for (let k = 0; k < grammarN3List.length; k++) {
+      if (grammarN3List[k]["id"] == id) {
+        idIndex = k;
+        break;
+      }
+    }
+    if (idIndex == undefined) {
+      continue;
+    }
+
+    const grammar = grammarN3List[idIndex].grammar;
+    let exampleQuiz;
+
+    if (grammarN3ExamDatas[j]["exampleQuiz"] != undefined) {
+      exampleQuiz = grammarN3ExamDatas[j]["exampleQuiz"];
+    } else {
+      exampleQuiz = grammar;
+    }
+    const tempGrammar2Exam = {
+      answer: exampleQuiz,
+      word: grammarN3ExamDatas[j]["exampleJapan"],
+      mean: grammarN3ExamDatas[j]["exampleKorean"],
+    };
+    grammarN3List[idIndex].examples.push(tempGrammar2Exam);
+  }
+
+  console.log(grammarN3List);
+
+  return grammarN3List;
+};
 export const execlTo2345JsonJLPT = (level) => {
   console.log(level);
 

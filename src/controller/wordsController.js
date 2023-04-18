@@ -4,6 +4,7 @@ import {
   execlToJsonToeic,
   execlToJsonJLPT,
   execlTo2345JsonJLPT,
+  execlToJsonGrammarN2N3,
 } from "../excelData";
 
 export const postToeicVoca = async (req, res) => {
@@ -11,8 +12,18 @@ export const postToeicVoca = async (req, res) => {
 
   return res.json(vocas);
 };
+function arrayShuffle(array) {
+  for (let i = array.length - 1; 0 < i; i--) {
+    let r = Math.floor(Math.random() * (i + 1));
 
-export const postAllJlptVoca = async (req, res) => {
+    let tmp = array[i];
+    array[i] = array[r];
+    array[r] = tmp;
+  }
+  return array;
+}
+
+export const postN1AllJlptVoca = async (req, res) => {
   const hiragas = [
     "あ단",
     "か단",
@@ -30,10 +41,42 @@ export const postAllJlptVoca = async (req, res) => {
   const result = [];
 
   for (let i = 0; i < hiragas.length; i++) {
-    result.push(execlToJsonJLPT(hiragas[i]));
+    result.push(...execlToJsonJLPT(hiragas[i]));
+  }
+  arrayShuffle(result);
+  const resultList = [];
+
+  const stepCont = Math.floor(result.length / 210);
+  const restStep = Math.floor(result.length % 210);
+  var tmp = 0;
+  for (; tmp < stepCont; tmp++) {
+    resultList.push(result.slice(tmp * 210, tmp * 210 + 210));
+  }
+  if (restStep != 0) {
+    console.log("tmp", tmp);
+
+    console.log(
+      "json.slice(tmp * 210 + 210, json.length)",
+      result.slice(stepCont * 210 + 210)
+    );
+
+    resultList.push(result.slice((stepCont - 1) * 210 + 210));
   }
 
-  return res.json(result);
+  console.log("stepCont", stepCont);
+  console.log("restStep", restStep);
+  // 210
+  // 14   1470
+  // console.log(json);
+  for (var tt = 0; tt < resultList.length; tt++) {
+    for (var bb = 0; bb < resultList[tt].length; bb++) {
+      resultList[tt][bb] = {
+        ...resultList[tt][bb],
+        headTitle: "쳅터" + (tt + 1),
+      };
+    }
+  }
+  return res.json(resultList);
 };
 
 export const post2316JlptVoca = async (req, res) => {
@@ -70,7 +113,7 @@ export const postAll2316JlptVoca = async (req, res) => {
   return res.json(result);
 };
 
-export const postJlptVoca = async (req, res) => {
+export const postN1JlptVoca = async (req, res) => {
   const { headTitle } = req.query;
 
   const vocas = execlToJsonJLPT(headTitle);
@@ -88,6 +131,12 @@ export const postJlptN2345Voca = async (req, res) => {
 
 export const postJlptGrammar = async (req, res) => {
   const result = execlToJsonGrammar();
+
+  return res.json(result);
+};
+
+export const postJlptGrammarN2N3 = async (req, res) => {
+  const result = execlToJsonGrammarN2N3();
 
   return res.json(result);
 };
