@@ -174,11 +174,18 @@ export const execlTo2345JsonJLPT = (level) => {
   const json = [];
 
   for (let i = 0; i < datas.length; i++) {
-    const word = datas[i]["단어"];
+    var word = datas[i]["단어"];
     var yomikata = datas[i]["히라가나"];
     if (yomikata.includes("\n")) {
       yomikata = yomikata.split("\n")[0];
     }
+    yomikata =  yomikata.trim();
+    if(yomikata[0] !='-' && yomikata[yomikata.length -1] != '-' && yomikata.includes('-')) {
+      console.log(yomikata);
+      yomikata= yomikata.replaceAll('-','');
+      console.log(yomikata);
+    }
+
     if (word == undefined) {
       word = yomikata;
     } else {
@@ -186,12 +193,21 @@ export const execlTo2345JsonJLPT = (level) => {
         word = word.split("\n")[0];
       }
     }
+    var mean = datas[i]["뜻"];
+    
+    // console.log(mean);
+    if(mean ==undefined) continue;
+    if (mean.includes(";")) {
+      mean=  mean.replaceAll(';', ', ');
+    }
+    word = word.trim();
+    
+    mean = mean.trim();
     const noDayVoca = {
       id: i,
       word,
       yomikata,
-      mean: datas[i]["뜻"],
-      // headTitle: headTitle,
+      mean,
     };
     id++;
     json.push(noDayVoca);
@@ -221,14 +237,11 @@ export const execlTo2345JsonJLPT = (level) => {
 
   console.log("stepCont", stepCont);
   console.log("restStep", restStep);
-  // 210
-  // 14   1470
-  // console.log(json);
   for (var tt = 0; tt < resultList.length; tt++) {
     for (var bb = 0; bb < resultList[tt].length; bb++) {
       resultList[tt][bb] = {
         ...resultList[tt][bb],
-        headTitle: tt + 1 + "일",
+        headTitle: "챕터" + (tt + 1 ),
       };
     }
   }

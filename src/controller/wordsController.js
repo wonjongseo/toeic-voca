@@ -83,7 +83,6 @@ export const post2316JlptVoca = async (req, res) => {
   const { headTitle } = req.query;
   console.log(headTitle);
   const vocas = execlToJson2316JlptVoca(headTitle);
-
   return res.json(vocas);
 };
 export const postAll2316JlptVoca = async (req, res) => {
