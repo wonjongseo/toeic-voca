@@ -5,6 +5,7 @@ import {
   execlToJsonJLPT,
   execlTo2345JsonJLPT,
   execlToJsonGrammarN2N3,
+  execlToJson2316JlptVocaBySort,
 } from "../excelData";
 
 export const postToeicVoca = async (req, res) => {
@@ -111,6 +112,79 @@ export const postAll2316JlptVoca = async (req, res) => {
 
   return res.json(result);
 };
+
+export const postAll2316SortByLevel = (req,res,next) => { 
+  console.log('postAll2316SortByLevel');
+
+  const hanguls = [
+    "가",
+    "나",
+    "다",
+    "라",
+    "마",
+    "바",
+    "사",
+    "아",
+    "자",
+    "차",
+    "카",
+    "타",
+    "파",
+    "하",
+  ];
+
+  const returnValue= [[],[],[],[],[],[]];
+  for(let i = 0  ; i<hanguls.length ; i++) {
+    const ret =  execlToJson2316JlptVocaBySort(hanguls[i]);  
+
+    returnValue[0]= [...returnValue[0] ,  ...ret[0]]; 
+    returnValue[1]= [...returnValue[1] ,  ...ret[1]];
+    returnValue[2]= [...returnValue[2] ,  ...ret[2]];
+    returnValue[3]= [...returnValue[3] ,  ...ret[3]];
+    returnValue[4]= [...returnValue[4] ,  ...ret[4]];
+    returnValue[5]= [...returnValue[5] ,  ...ret[5]];
+  }
+  const resultList = [
+    [],[],[],[],[],[],
+  ];
+  for(let i = 0  ; i<returnValue.length ; i++) {
+    const stepCont = Math.floor(returnValue[i].length / 210);
+    const restStep = Math.floor(returnValue[i].length % 210);
+    // 0 210
+    // 210 420
+    // 420 630
+    // 630
+    var tmp = 0;
+    for (; tmp < stepCont; tmp++) {
+      resultList[i].push(returnValue[i].slice(tmp * 210, tmp * 210 + 210));
+    }
+    if (restStep != 0) {
+      console.log("tmp", tmp);
+
+      console.log(
+        "returnValue[i].slice(tmp * 210 + 210, returnValue[i].length)",
+        returnValue[i].slice(stepCont * 210 + 210)
+      );
+
+      resultList[i].push(returnValue[i].slice((stepCont - 1) * 210 + 210));
+    }
+
+    console.log("stepCont", stepCont);
+    console.log("restStep", restStep);
+    for (var tt = 0; tt < resultList[i].length; tt++) {
+      for (var bb = 0; bb < resultList[i][tt].length; bb++) {
+        resultList[i][tt][bb] = {
+          ...resultList[i][tt][bb],
+          headTitle: "챕터" + (tt + 1 ),
+        };
+      }
+    }
+  }
+  
+
+  return res.json(resultList);
+
+} 
 
 export const postN1JlptVoca = async (req, res) => {
   const { headTitle } = req.query;

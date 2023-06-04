@@ -272,6 +272,105 @@ export const execlToJsonJLPT = (headTitle) => {
   return json;
 };
 
+export const execlToJson2316JlptVocaBySort = (headTitle) => {
+
+  const returnValue= [[],[],[],[],[],[]];
+  const headTitlesheet = japan2316Books.Sheets[headTitle];
+  const headTitleDatas = xlsx.utils.sheet_to_json(headTitlesheet);
+
+  const headTitleRelatedsheet = japan2316Books.Sheets[headTitle + "-연관"];
+  const headTitleRelatedDatas = xlsx.utils.sheet_to_json(headTitleRelatedsheet);
+
+  const headTitleWords = [];
+  const headTitleId = [];
+
+  const headTitleRelatedId = [];
+  const headTitleRelatedWords = [];
+
+for (let i = 0; i < headTitleRelatedDatas.length; i++) {
+    const yomikata = headTitleRelatedDatas[i]["yomikata"];
+    const word = headTitleRelatedDatas[i]["word"];
+    const mean = headTitleRelatedDatas[i]["mean"];
+    const id = headTitleRelatedDatas[i]['japanese_id'];
+    if (yomikata == undefined && word == undefined && mean == undefined) {
+      continue;
+    }
+    headTitleRelatedId.push(headTitleRelatedDatas[i]["japanese_id"]);
+    const relatedWord = {
+      yomikata,
+      word,
+      mean,
+      id,
+    };
+
+    headTitleRelatedWords.push(relatedWord);
+  }
+
+  for (let i = 0; i < headTitleDatas.length; i++) {
+    const id = headTitleDatas[i]["id"];
+
+    const japan = headTitleDatas[i]["japan"];
+    const korea = headTitleDatas[i]["korea"];
+    const undoc = headTitleDatas[i]["undoc"];
+    const hundoc = headTitleDatas[i]["hundoc"];
+    const jlpt_level = headTitleDatas[i]["jlpt_level"];
+    if (
+      japan == undefined &&
+      korea == undefined &&
+      undoc == undefined &&
+      hundoc == undefined &&
+      jlpt_level == undefined
+    ) {
+      continue;
+    }
+
+
+    const voca = {
+      id,
+      japan,
+      korea,
+      undoc,
+      hundoc,
+      headTitle,
+      jlpt_level,
+    };
+
+    switch(jlpt_level) {
+      case 1 :
+          returnValue[0].push(voca);
+        break;
+        case 2 :
+          returnValue[1].push(voca);
+        break;
+        case 3 :
+          returnValue[2].push(voca);
+        break;
+        case 4 :
+          returnValue[3].push(voca);
+        break;
+        case 5 :
+          returnValue[4].push(voca);
+        break;
+        default:
+          returnValue[5].push(voca);
+        break;
+    }
+  }
+  for(let i = 0 ; i < returnValue.length ; i++) {
+    for(let j = 0 ; j< returnValue[i].length ;j++) {
+      const relatedVoca = [];
+      for(let z = 0 ; z < headTitleRelatedWords.length ; z++) {
+        if(headTitleRelatedWords[z].id == returnValue[i][j].id) {
+          relatedVoca.push(headTitleRelatedWords[z]);
+        }
+      }
+      returnValue[i][j] = {...returnValue[i][j] , relatedVoca}; 
+    }
+  }
+  return returnValue;
+
+}
+
 export const execlToJson2316JlptVoca = (headTitle) => {
   const headTitlesheet = japan2316Books.Sheets[headTitle];
   const headTitleDatas = xlsx.utils.sheet_to_json(headTitlesheet);
