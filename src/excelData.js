@@ -7,7 +7,7 @@ export const japanN1GrammarBooks = xlsx.readFile(
   __dirname + "/../public/n-1문법.xlsx"
 );
 export const japanN2N3Books = xlsx.readFile(
-  __dirname + "/../public/n2,n3문법.xlsx"
+  __dirname + "/../public/문법통합본.xlsx"
 );
 export const japanN2345Books = xlsx.readFile(
   __dirname + "/../public/n2345.xlsx"
@@ -109,8 +109,8 @@ export const execlToJsonGrammarN2N3 = () => {
   console.log("execlToJsonGrammarN2N3 et");
 
   // 문법2 , 문법2-예제
-  const grammarN3Sheet = japanN2N3Books.Sheets["n3-문법"];
-  const grammarN3ExamSheet = japanN2N3Books.Sheets["n3-문법-예제"];
+  const grammarN3Sheet = japanN2N3Books.Sheets["n3문법"];
+  const grammarN3ExamSheet = japanN2N3Books.Sheets["n3문법-예제"];
 
   const grammarN3Datas = xlsx.utils.sheet_to_json(grammarN3Sheet);
   const grammarN3ExamDatas = xlsx.utils.sheet_to_json(grammarN3ExamSheet);
