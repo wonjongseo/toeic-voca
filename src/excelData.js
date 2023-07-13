@@ -460,15 +460,18 @@ export const execlToJsonToeic = (req, res) => {
   const datas = xlsx.utils.sheet_to_json(sheet);
   //
 
-  const json = {};
+  const json = [];
   for (let i = 0; i < datas.length; i++) {
     let day = datas[i]["Day"];
 
     const a = day.substring(3);
     console.log(a);
-
+    if(datas[i]["단어"] == undefined) {
+      console.log('datas[i]["단어"]');
+      continue;
+    }
     const noDayVoca = {
-      voca: datas[i]["단어"],
+      word: datas[i]["단어"],
       mean: datas[i]["뜻"],
     };
 
@@ -478,7 +481,8 @@ export const execlToJsonToeic = (req, res) => {
     json[a].push(noDayVoca);
   }
 
-  console.log(json);
+
+  console.log(json.length);
 
   return json;
 };
